@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Flex, Calculator } from './styles';
 import Display from './components/display';
 import Buttons from './components/buttons';
 
 import calculate from './helpers';
-import "./App.css";
+import keyboard from './helpers/keyboard';
 
 const App = () => {
   let [first, setFirst] = useState(0);
@@ -32,11 +32,24 @@ const App = () => {
 
     if(sign && second && first) {
       let res = calculate(first, second, sign);
-      console.log(res);
-      // setSign(null);
       setFirst(res);
       setSecond(res);
     }
+  }
+
+  const zero = (a) => {
+    if(!first || first === second) {
+      return;
+    }
+    setFirst(prevState => prevState.toString() + a.toString());
+  }
+
+  const decimal = (a) => {
+    if(!first || first === second) {
+      setFirst('0' + a);
+      return;
+    }
+    setFirst(prevState => prevState.toString() + a.toString());
   }
 
   const equal = () => {
@@ -44,7 +57,7 @@ const App = () => {
       let res = calculate(first, second, sign);
       setSign(null);
       setFirst(res);
-      setSecond(res);
+      setSecond(0);
     }
   }
 
@@ -55,14 +68,34 @@ const App = () => {
   }
 
   return (
-    <Flex>
+    <Flex onKeyDown={(e) => {
+      keyboard(
+        e,
+        setNumber,
+        zero,
+        decimal,
+        equal,
+        cnt,
+        cls
+      );
+    }} tabIndex="0">
       <Calculator>
+
         <Display
           first={first}
           second={second}
           sign={sign}
         />
-        <Buttons cnt={cnt} cls={cls} equal={equal} setNumber={setNumber} />
+
+        <Buttons
+          cnt={cnt}
+          cls={cls}
+          zero={zero}
+          decimal={decimal}
+          equal={equal}
+          setNumber={setNumber}
+        />
+
       </Calculator>
     </Flex>
   )
