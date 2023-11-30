@@ -1,8 +1,5 @@
 import styled, { css } from 'styled-components';
 
-const bgColor = '#202259';
-const color = '#fafafa';
-
 export const Flex = styled.div`
   height: 100vh;
   width: 100%;
@@ -30,6 +27,7 @@ export const Calculator = styled.div`
   border-radius: 6px;
   padding: 4px;
   box-shadow: 0 0 4px 4px #82a9ad;
+
   @media (min-width: 1024px) {
     height: 75vh;
     width: 28%;
@@ -41,7 +39,7 @@ export const Nums = styled.div`
   width: 100%;
   border-radius: 6px;
   padding: 4px;
-  background-color: ${color};
+  background-color: ${({ theme }) => theme.color};
   box-shadow: 0 0 2px 2px #c5f5fa;
 `;
 
@@ -75,44 +73,60 @@ export const ButtonsContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-export const BigButtonsContainer = styled.div`
+export const BigButtonsContainer = styled.div<{ column?: string }>`
   height: 100%;
   width: 25%;
   display: flex;
   align-items: center;
   justify-content: center;
-  ${props => props.column && css`
-    flex-direction: column;
-  `}
+
+  ${({ column }) =>
+    column &&
+    css`
+      flex-direction: column;
+    `}
 `;
 
-export const Button = styled.button`
+export const Button = styled.button<{
+  height?: string;
+  width?: string;
+  classic?: string;
+  bgcolor?: string;
+}>`
   height: 20%;
   flex: 0 0 33.33%;
   font-size: 1.2rem;
   border: 1px solid lightblue;
   outline: none;
-  background-color: ${bgColor};
-  color: ${color};
+  background-color: ${({ theme }) => theme.bgColor};
+  color: ${({ theme }) => theme.color};
   transition: all 0.4s;
 
-  ${props => props.height && css`
-    width: 100%;
-    flex: 0 0 40%;
-  `}
+  ${({ height }) =>
+    height &&
+    css`
+      width: 100%;
+      flex: 0 0 40%;
+    `}
 
-  ${props => props.classic && css`
-    width: 100%;
-    flex: 0 0 20%;
-  `}
+  ${({ classic }) =>
+    classic &&
+    css`
+      width: 100%;
+      flex: 0 0 20%;
+    `}
 
-  ${props => props.width && css`
-    flex: 0 0 66.66%;
-  `}
+  ${({ width }) =>
+    width &&
+    css`
+      flex: 0 0 66.66%;
+    `}
 
-  ${props => props.bgColor && css`
-    background-color: ${props.bgColor};
-  `}
+  ${({ bgcolor }) =>
+    bgcolor &&
+    css`
+      background-color: ${({ theme }) => theme.bgColor};
+    `}
 
   &:hover {
     filter: brightness(44%);
